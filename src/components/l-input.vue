@@ -4,7 +4,8 @@
     v-on="omit($listeners, ['input'])"
     @input="handleInput"
     @blur="handleBlur"
-  ></ElInput>
+  >
+  </ElInput>
 </template>
 
 <script>
@@ -25,6 +26,9 @@ export default {
   data() {
     return {};
   },
+  created() {
+    console.log(this.$scopedSlots, this.$slots);
+  },
   methods: {
     omit,
     handleInput(val) {
@@ -32,14 +36,14 @@ export default {
       if (isNumber) {
         val = setNumberFormat(val);
       }
-      this.$emit("input", val);
+      this.$emit("updateFormDataVal", val);
     },
     handleBlur(e) {
       let val = e.target.value;
       let { isNumber } = this;
       if (isNumber) {
         val = clearLastPoint(val);
-        this.$emit("input", val);
+        this.$emit("updateFormDataVal", val);
       }
     },
   },

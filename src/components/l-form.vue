@@ -1,10 +1,10 @@
 <template>
   <div>
-    <ElForm v-bind="$attrs">
+    <ElForm :model="formData" :ref="formRef" v-bind="$attrs">
       <template v-for="(formItem, i) in formItemList">
         <LFromItem
-          :value="get(value, formItem.prop)"
-          @input="handleInput(value, formItem.prop, $event)"
+          :value="get(formData, formItem.prop)"
+          @updateFormDataVal="handleChange(formData, formItem.prop, $event)"
           v-bind="formItem"
           :key="'form_item_' + i"
         ></LFromItem>
@@ -22,28 +22,48 @@ export default {
   components: {
     LFromItem,
   },
-  props: {
-    value: {},
-    formItemList: {},
+  model: {
+    prop: "formData",
+    event: "updateFormData",
   },
-  created() {
-    this.initForm();
+  props: {
+    formData: {},
+    formItemList: {},
+    formRef: {
+      type: String,
+      default: "formData",
+    },
   },
   methods: {
     get,
     set,
-    initForm() {
-      const formData = cloneDeep(this.value);
-      this.formItemList.forEach((item) => {
-        const { prop, value } = item;
-        set(formData, prop, value || get(formData, prop) || "");
-      });
-      this.$emit("input", formData);
+
+    handleChange(formData, prop, value) {
+      const newFormData = set(formData, prop, value);
+      this.$emit("updateFormData", newFormData);
     },
-    handleInput(formData, prop, value) {
-      console.log(formData, prop, value);
-      const obj = set(formData, prop, value);
-      this.$emit("input", obj);
+
+    async submit(cb) {
+      await this.validate();
+      cb && cb(this.formData);
+    },
+
+    validate() {
+      return this.form.validate();
+    },
+
+    resetFields(props = undefined) {
+      console.log(this.$refs[this.formRef].clearValidate);
+      this.$refs[this.formRef].clearValidate(props);
+    },
+
+    resetFields() {
+      this.$refs[this.formRef].resetFields();
+    },
+  },
+  computed: {
+    form() {
+      this.$refs[this.formRef];
     },
   },
 };

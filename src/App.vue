@@ -1,68 +1,66 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <LForm v-model="formModel" v-bind="formConfig" />
-    <cs v-model="obj"></cs>
+    <LForm ref="formData" v-model="formData" v-bind="formConfig" />
+    <ElButton @click="clear">清除</ElButton>
   </div>
 </template>
 
 <script>
+import { set } from "lodash-es";
 import LForm from "./components/l-form.vue";
-import Flex from "./components/flex.vue";
-import cs from "./components/csProps.vue";
-
+const formConfig = {
+  labelWidth: "80px",
+  formItemList: [
+    {
+      label: "ljw:",
+      tag: "input",
+      prop: "name",
+      maxlength: "10",
+      "show-word-limit": true,
+      isNumber: true,
+      value: 123,
+    },
+    {
+      label: "name:",
+      tag: "input",
+      prop: "person.name",
+      maxlength: "10",
+      "show-word-limit": true,
+      isNumber: false,
+    },
+    {
+      tag: "input",
+      label: "age:",
+      prop: "person.age",
+      maxlength: "10",
+      "show-word-limit": true,
+      isNumber: true,
+    },
+  ],
+};
+const initFormData = () => {
+  const formData = {};
+  formConfig.formItemList.forEach((item) => {
+    const { prop, value } = item;
+    set(formData, prop, value || "");
+  });
+  return formData;
+};
+const formData = initFormData();
 export default {
   name: "App",
   components: {
     LForm,
-    Flex,
-    cs,
   },
   data() {
     return {
-      formModel: {},
-      formConfig: {
-        labelWidth: "80px",
-        formItemList: [
-          {
-            label: "ljw:",
-            prop: "name",
-            maxlength: "10",
-            "show-word-limit": true,
-            isNumber: true,
-            value: 123,
-          },
-          {
-            label: "name:",
-            prop: "person.name",
-            maxlength: "10",
-            "show-word-limit": true,
-            isNumber: false,
-          },
-          {
-            label: "age:",
-            prop: "person.age",
-            maxlength: "10",
-            "show-word-limit": true,
-            isNumber: true,
-          },
-        ],
-      },
-      obj: {
-        a: 1,
-      },
-      obj2: {},
+      formData,
+      formConfig,
     };
   },
-  created() {
-    this.obj2 = this.obj;
-  },
-  watch: {
-    "obj.a": function() {
-      console.log(this.obj2 === this.obj);
-    },
-    "obj.b": function() {
-      console.log(this.obj2 === this.obj);
+  methods: {
+    clear() {
+      this.$refs.formData.resetFields();
     },
   },
 };
