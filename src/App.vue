@@ -13,12 +13,17 @@ const formConfig = {
   formItemList: [
     {
       label: "ljw:",
-      tag: "input",
+      tag: "select",
       prop: "name",
-      maxlength: "10",
-      "show-word-limit": true,
-      isNumber: true,
-      value: 123,
+      value: "1",
+      options: [
+        { label: "cs1", value: "1" },
+        { label: "cs2", value: "2" },
+        { label: "cs3", value: "3" },
+      ],
+      slots: {
+        prefix: "xxxxxxxxxx",
+      },
     },
     {
       label: "name:",

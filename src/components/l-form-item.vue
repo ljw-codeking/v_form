@@ -1,11 +1,11 @@
 <template>
   <ElFormItem :prop="prop" :label="label" :rules="rules">
     <LInput v-if="tag === 'input'" v-bind="$attrs" v-on="$listeners"> </LInput>
-    <!-- <LSelect
+    <LSelect
       v-if="tag === 'select'"
       v-bind="$attrs"
       v-on="$listeners"
-    ></LSelect> -->
+    ></LSelect>
   </ElFormItem>
 </template>
 

@@ -11,3 +11,14 @@ export function clearLastPoint(val) {
   val = val.replace(/\.$/, '')
   return val
 }
+
+export function is(val) {
+  return Object.prototype.toString.call(null, val)
+}
+
+export function isFunction(val) {
+  return is(val) === "[object Function]"
+}
+export function isString(val) {
+  return is(val) === "[object String]"
+}

@@ -1,21 +1,24 @@
 <template>
   <div>
     <ElForm :model="formData" :ref="formRef" v-bind="$attrs">
-      <template v-for="(formItem, i) in formItemList">
-        <LFromItem
-          :value="get(formData, formItem.prop)"
-          @updateFormDataVal="handleChange(formData, formItem.prop, $event)"
-          v-bind="formItem"
-          :key="'form_item_' + i"
-        ></LFromItem>
-      </template>
+      <ElRow>
+        <template v-for="(formItem, i) in formItemList">
+          <ElCol :key="'form_item_' + i">
+            <LFromItem
+              :value="get(formData, formItem.prop)"
+              @updateFormDataVal="handleChange(formData, formItem.prop, $event)"
+              v-bind="formItem"
+            ></LFromItem>
+          </ElCol>
+        </template>
+      </ElRow>
     </ElForm>
   </div>
 </template>
 
 <script>
 import LFromItem from "./l-form-item.vue";
-import { set, get, cloneDeep } from "lodash-es";
+import { set, get } from "lodash-es";
 
 export default {
   name: "LForm",
@@ -53,20 +56,18 @@ export default {
     },
 
     resetFields(props = undefined) {
-      console.log(this.$refs[this.formRef].clearValidate);
-      this.$refs[this.formRef].clearValidate(props);
+      this.form.clearValidate(props);
     },
 
     resetFields() {
-      this.$refs[this.formRef].resetFields();
+      this.form.resetFields();
     },
   },
   computed: {
     form() {
-      this.$refs[this.formRef];
+      return this.$refs[this.formRef];
     },
   },
 };
 </script>
-
 <style></style>

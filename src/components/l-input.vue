@@ -1,7 +1,7 @@
 <template>
   <ElInput
     v-bind="$attrs"
-    v-on="omit($listeners, ['input'])"
+    v-on="$listeners"
     @input="handleInput"
     @blur="handleBlur"
   >
@@ -22,6 +22,10 @@ export default {
     isNumber: { type: Boolean, default: false },
     isPoint: { type: Boolean, default: true }, // 是否是小数点输入
     pointLen: { type: Number, default: 2 }, // 小数点长度
+  },
+  model: {
+    prop: "value",
+    event: "updateFormDataVal",
   },
   data() {
     return {};
